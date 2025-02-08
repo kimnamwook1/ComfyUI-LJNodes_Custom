@@ -7,7 +7,7 @@ import { clickedOnGroupTitle,
        } from "./utils.js";
 
 const LJNODES_NODE_TITLE_EDIT_TRIGGER = "Comfy.LJNodes.UIHelpers.NodeTitleEditTrigger";
-const LJNODES_NODE_TITLE_EDIT_TRIGGER_DEFAULT = "Double Click";
+const LJNODES_NODE_TITLE_EDIT_TRIGGER_DEFAULT = "Double Click"; 
 const LJNODES_GROUP_PADDING = "Comfy.LJNodes.UIHelpers.GroupPadding";
 const LJNODES_GROUP_PADDING_DEFAULT = 10;
 
@@ -39,21 +39,21 @@ app.registerExtension({
       type: "number",
     });
   },
-
-  async nodeCreated(node, app) {
-    let orig_dblClick = node.onDblClick;
-    node.onDblClick = function (e, pos, self) {
-      orig_dblClick?.apply?.(this, arguments);
-      const setting = app.ui.settings.getSettingValue(LJNODES_NODE_TITLE_EDIT_TRIGGER, LJNODES_NODE_TITLE_EDIT_TRIGGER_DEFAULT);
-      if (setting === LJNODES_NODE_TITLE_EDIT_TRIGGER_DEFAULT) {
-        if(pos[1] > 0) return;
-        let prompt = window.prompt("Title", this.title);
-        if (prompt) { this.title = prompt; }
-      }
-    }
-  },
+  // 더블클릭 방지
+  //async nodeCreated(node, app) {
+  //  let orig_dblClick = node.onDblClick;
+  //  node.onDblClick = function (e, pos, self) {
+  //    orig_dblClick?.apply?.(this, arguments);
+  //    const setting = app.ui.settings.getSettingValue(LJNODES_NODE_TITLE_EDIT_TRIGGER, LJNODES_NODE_TITLE_EDIT_TRIGGER_DEFAULT);
+  //    if (setting === LJNODES_NODE_TITLE_EDIT_TRIGGER_DEFAULT) {
+  //      if(pos[1] > 0) return;
+  //      let prompt = window.prompt("Title", this.title);
+  //      if (prompt) { this.title = prompt; }
+  //    }
+  //  }
+  //},
 });
-
+/*
 let lastClickedTime;
 const processMouseDown = LGraphCanvas.prototype.processMouseDown;
 LGraphCanvas.prototype.processMouseDown = function (e) {
@@ -84,6 +84,7 @@ LGraphCanvas.prototype.processMouseDown = function (e) {
     return processMouseDown.apply(this, [...arguments]);
   }
 };
+*/
 
 const origProcessKey = LGraphCanvas.prototype.processKey;
 LGraphCanvas.prototype.processKey = function(e) {
