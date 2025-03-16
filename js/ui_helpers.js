@@ -100,6 +100,7 @@ LGraphCanvas.prototype.processKey = function(e) {
 
   if (e.type == "keydown" && !e.repeat) {
     // Ctrl + G, Add Group For Selected Nodes
+    /*
     if (e.key === 'g' && e.ctrlKey) {
       if (Object.keys(app.canvas.selected_nodes || {}).length) {
         var group = new LiteGraph.LGraphGroup();
@@ -109,8 +110,10 @@ LGraphCanvas.prototype.processKey = function(e) {
       }
       block_default = true;
     }
+    */
 
     // Ctrl + Q, Queue Selected Output Nodes (rgthree) 
+    /*
     if (e.key === 'q' && e.ctrlKey) {
       const outputNodes = getOutputNodesFromSelected(app.canvas);
       if (outputNodes.length) {
@@ -118,8 +121,10 @@ LGraphCanvas.prototype.processKey = function(e) {
       }
       block_default = true;
     }
+    */
 
     // F2, Rename Selected Node
+    /*
     if (e.key === 'F2') {
       const setting = app.ui.settings.getSettingValue(LJNODES_NODE_TITLE_EDIT_TRIGGER, LJNODES_NODE_TITLE_EDIT_TRIGGER_DEFAULT);
       if (setting === "F2") {
@@ -131,6 +136,7 @@ LGraphCanvas.prototype.processKey = function(e) {
         }
       }
     }
+    */
 
     // Alt + W/S/A/D, Align Selected Nodes
     if (e.altKey && ["w", "s", "a", "d"].includes(e.key)) {
@@ -161,6 +167,76 @@ LGraphCanvas.prototype.processKey = function(e) {
         block_default = true;
       }
     }
+    
+    // Alt + M, Horizontal center alignment among selected nodes (like PowerPoint)
+    if (e.altKey && e.key === "m") {
+      const nodes = app.canvas.selected_nodes;
+      const nodeIds = Object.keys(nodes);
+      if (nodeIds.length > 1) {
+        // Find the center line of all selected nodes
+        let minX = Infinity;
+        let maxX = -Infinity;
+        
+        nodeIds.forEach(id => {
+          const node = nodes[id];
+          const left = node.pos[0];
+          const right = left + node.size[0];
+          
+          minX = Math.min(minX, left);
+          maxX = Math.max(maxX, right);
+        });
+        
+        const centerX = minX + (maxX - minX) / 2;
+        
+        // Align each node to that center line
+        nodeIds.forEach(id => {
+          const node = nodes[id];
+          // Calculate the node's center position
+          const nodeCenter = node.pos[0] + node.size[0] / 2;
+          // Calculate how far to move to be centered
+          const offset = centerX - nodeCenter;
+          // Apply the offset
+          node.pos[0] += offset;
+        });
+        
+        block_default = true;
+      }
+    }
+    
+    // Alt + N, Vertical center alignment among selected nodes (like PowerPoint)
+    if (e.altKey && e.key === "n") {
+      const nodes = app.canvas.selected_nodes;
+      const nodeIds = Object.keys(nodes);
+      if (nodeIds.length > 1) {
+        // Find the center line of all selected nodes
+        let minY = Infinity;
+        let maxY = -Infinity;
+        
+        nodeIds.forEach(id => {
+          const node = nodes[id];
+          const top = node.pos[1];
+          const bottom = top + node.size[1];
+          
+          minY = Math.min(minY, top);
+          maxY = Math.max(maxY, bottom);
+        });
+        
+        const centerY = minY + (maxY - minY) / 2;
+        
+        // Align each node to that center line
+        nodeIds.forEach(id => {
+          const node = nodes[id];
+          // Calculate the node's center position
+          const nodeCenter = node.pos[1] + node.size[1] / 2;
+          // Calculate how far to move to be centered
+          const offset = centerY - nodeCenter;
+          // Apply the offset
+          node.pos[1] += offset;
+        });
+        
+        block_default = true;
+      }
+    }
   }
 
   this.graph.change();
@@ -175,6 +251,7 @@ LGraphCanvas.prototype.processKey = function(e) {
 };
 
 // NOTE: LGraphNode.prototype.getSlotMenuOptions does not exist, no need to override.
+/*
 LGraphNode.prototype.getSlotMenuOptions = function (slot) {
   let options = defaultGetSlotMenuOptions(slot);
 
@@ -203,3 +280,4 @@ LGraphNode.prototype.getSlotMenuOptions = function (slot) {
   }
   return options;
 }
+*/
